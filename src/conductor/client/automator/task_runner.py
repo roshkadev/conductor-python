@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import traceback
+from concurrent.futures import ThreadPoolExecutor
 
 from conductor.client.configuration.configuration import Configuration
 from conductor.client.configuration.settings.metrics_settings import MetricsSettings
@@ -63,11 +64,17 @@ class TaskRunner:
             except Exception as e:
                 pass
 
+    def __execute_and_update_task(self, task):
+        task_result = self.__execute_task(task)
+        self.__update_task(task_result)
+
     def run_once(self) -> None:
         task = self.__poll_task()
         if task is not None and task.task_id is not None:
-            task_result = self.__execute_task(task)
-            self.__update_task(task_result)
+            # with ThreadPoolExecutor(max_workers=self.execution_threads) as executor:
+            with ThreadPoolExecutor(max_workers=configuration.execution_threads) as executor:
+                # Submit the task execution and update as a single operation
+                future = executor.submit(self.__execute_and_update_task, task)
         self.__wait_for_polling_interval()
         self.worker.clear_task_definition_name_cache()
 

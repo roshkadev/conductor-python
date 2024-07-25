@@ -14,7 +14,8 @@ class Configuration:
             debug: bool = False,
             authentication_settings: AuthenticationSettings = None,
             server_api_url: str = None,
-            auth_token_ttl_min: int = 45
+            auth_token_ttl_min: int = 45,
+            execution_threads: int = 1
     ):
         if server_api_url is not None:
             self.host = server_api_url
@@ -41,6 +42,7 @@ class Configuration:
             else:
                 self.authentication_settings = None
 
+        self.execution_threads = execution_threads
 
         # Debug switch
         self.debug = debug
