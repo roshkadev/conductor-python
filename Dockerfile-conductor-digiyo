@@ -1,0 +1,26 @@
+FROM python:3.12.4-slim-bullseye
+
+
+RUN mkdir /python
+WORKDIR /python
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . /python
+
+RUN pip install .
+
+RUN rm -rf /python
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY test.py /app
+
+RUN pip install --upgrade pip
+
+CMD ["python", "test.py"]
+
+
