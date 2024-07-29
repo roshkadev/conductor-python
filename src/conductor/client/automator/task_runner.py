@@ -22,6 +22,7 @@ logger = logging.getLogger(
     )
 )
 
+juancito = 0
 
 class TaskRunner:
     def __init__(
@@ -65,16 +66,29 @@ class TaskRunner:
                 pass
 
     def __execute_and_update_task(self, task):
+        print('executing task')
         task_result = self.__execute_task(task)
+        print('updating task')
         self.__update_task(task_result)
 
     def run_once(self) -> None:
+        # global juancito
+        # print('run once: ' + str(juancito))
+        # juancito += 1
         task = self.__poll_task()
+        # print('polled completed')
+        if task is not None:
+            # print(f'task: {task}')
+            if task.task_id is not None:
+                print(f'task id: {task.task_id}')
         if task is not None and task.task_id is not None:
+            print('task polled')
             # with ThreadPoolExecutor(max_workers=self.execution_threads) as executor:
-            with ThreadPoolExecutor(max_workers=configuration.execution_threads) as executor:
+            with ThreadPoolExecutor(max_workers=self.configuration.execution_threads) as executor:
+                print('thread started')
                 # Submit the task execution and update as a single operation
                 future = executor.submit(self.__execute_and_update_task, task)
+                
         self.__wait_for_polling_interval()
         self.worker.clear_task_definition_name_cache()
 

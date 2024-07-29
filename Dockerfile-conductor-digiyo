@@ -1,10 +1,14 @@
-FROM python:3.12.4-slim-bullseye
+# FROM python:3.12.4-slim-bullseye
+FROM python:3.10.4-slim-bullseye
 
 
 RUN mkdir /python
 WORKDIR /python
 
 COPY requirements.txt .
+
+RUN pip install --upgrade pip
+RUN pip install --upgrade setuptools
 
 RUN pip install -r requirements.txt
 
@@ -19,7 +23,9 @@ WORKDIR /app
 
 COPY test.py /app
 
-RUN pip install --upgrade pip
+RUN apt-get update
+RUN apt-get install build-essential -y
+RUN apt-get install -y python3-opencv
 
 CMD ["python", "test.py"]
 

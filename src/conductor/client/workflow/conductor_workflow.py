@@ -103,7 +103,7 @@ class ConductorWorkflow:
         self._restartable = deepcopy(restartable)
         return self
 
-    def enable_status_listener(self, sink_name: bool) -> Self:
+    def enable_status_listener(self, sink_name: str) -> Self:
         self._workflow_status_listener_sink = sink_name
         self._workflow_status_listener_enabled = True
 
