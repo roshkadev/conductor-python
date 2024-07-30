@@ -27,6 +27,8 @@ RUN apt-get update
 RUN apt-get install build-essential -y
 RUN apt-get install -y python3-opencv
 
+RUN apt search glib2
+
 CMD ["python", "test.py"]
 
 

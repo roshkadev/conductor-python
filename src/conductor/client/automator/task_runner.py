@@ -48,6 +48,7 @@ class TaskRunner:
                 configuration=self.configuration
             )
         )
+        self.executor = ThreadPoolExecutor(max_workers=self.configuration.execution_threads)
 
     def run(self) -> None:
         if self.configuration is not None:
@@ -84,10 +85,7 @@ class TaskRunner:
         if task is not None and task.task_id is not None:
             print('task polled')
             # with ThreadPoolExecutor(max_workers=self.execution_threads) as executor:
-            with ThreadPoolExecutor(max_workers=self.configuration.execution_threads) as executor:
-                print('thread started')
-                # Submit the task execution and update as a single operation
-                future = executor.submit(self.__execute_and_update_task, task)
+            future = self.executor.submit(self.__execute_and_update_task, task)
                 
         self.__wait_for_polling_interval()
         self.worker.clear_task_definition_name_cache()
