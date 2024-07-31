@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 import time
+from datetime import datetime
 import traceback
 from concurrent.futures import ThreadPoolExecutor
 
@@ -73,20 +74,13 @@ class TaskRunner:
         self.__update_task(task_result)
 
     def run_once(self) -> None:
-        # global juancito
-        # print('run once: ' + str(juancito))
-        # juancito += 1
         task = self.__poll_task()
-        # print('polled completed')
-        if task is not None:
-            # print(f'task: {task}')
-            if task.task_id is not None:
-                logger.info(f'task id: {task.task_id}')
         if task is not None and task.task_id is not None:
-            logger.info('task polled')
+            logger.info(f'task polled {task.task_id} {datetime.now()}')
             self.executor.submit(self.__execute_and_update_task, task)
-                
-        self.__wait_for_polling_interval()
+        else:
+            # wait for polling interval just if no tasks were available
+            self.__wait_for_polling_interval()
         self.worker.clear_task_definition_name_cache()
 
     def __poll_task(self) -> Task:
