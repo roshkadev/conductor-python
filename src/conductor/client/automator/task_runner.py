@@ -59,7 +59,7 @@ class TaskRunner:
 
         task_names = ','.join(self.worker.task_definition_names)
         logger.info(f'Polling task {task_names} with domain {self.worker.get_domain()} with polling '
-                    f'interval {self.worker.get_polling_interval_in_seconds()}')
+                    f'interval {self.worker.get_polling_interval_in_seconds()} with {self.configuration.execution_threads} threads')
 
         while True:
             try:
