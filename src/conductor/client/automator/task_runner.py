@@ -67,9 +67,9 @@ class TaskRunner:
                 pass
 
     def __execute_and_update_task(self, task):
-        print('executing task')
+        logger.info('executing task')
         task_result = self.__execute_task(task)
-        print('updating task')
+        logger.info('updating task')
         self.__update_task(task_result)
 
     def run_once(self) -> None:
@@ -81,11 +81,10 @@ class TaskRunner:
         if task is not None:
             # print(f'task: {task}')
             if task.task_id is not None:
-                print(f'task id: {task.task_id}')
+                logger.info(f'task id: {task.task_id}')
         if task is not None and task.task_id is not None:
-            print('task polled')
-            # with ThreadPoolExecutor(max_workers=self.execution_threads) as executor:
-            future = self.executor.submit(self.__execute_and_update_task, task)
+            logger.info('task polled')
+            self.executor.submit(self.__execute_and_update_task, task)
                 
         self.__wait_for_polling_interval()
         self.worker.clear_task_definition_name_cache()
