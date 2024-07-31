@@ -1,6 +1,4 @@
-# FROM python:3.12.4-slim-bullseye
-FROM python:3.10.4-slim-bullseye
-
+FROM docker.roshka.com/xambucito/digiyo/cpu-digiyo-base:0.0.1
 
 RUN mkdir /python
 WORKDIR /python
